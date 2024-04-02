@@ -123,7 +123,7 @@ def update_item(event):
         # Step 2: Update the record using PatientID and the retrieved DateCreated
         # Construct the update expression and expression attribute values based on the update data dictionary
         # Example: set key1 = :key1, key2 = :key2, ...
-        update_expression = 'set ' + ', '.join([f"{key} = :{key}" 
+        update_expression = 'set ' + ', '.join([f"{key} = :{key}"
                                                 for key in update_data.keys()])
 
         # would be set , key= :key, value= :value 

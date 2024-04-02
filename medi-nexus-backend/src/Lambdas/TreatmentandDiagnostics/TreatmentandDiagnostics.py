@@ -5,33 +5,34 @@ import boto3
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('HealthCareProvider')
+table = dynamodb.Table('TreatmentandDiagnostics')
 
 def lambda_handler(event, context):
     # Get the ID from the path parameters
     httpMethod = event['httpMethod']
+
     if httpMethod == 'POST':
-        return createHealthCareProvider(event)
+        return createTreatmentandDiagnostics(event)
     elif httpMethod == 'GET':
-        return getHealthCareProvider(event)
+        return getTreatmentandDiagnostics(event)
     elif httpMethod == 'PUT':
-        return updateHealthCareProvider(event)
+        return updateTreatmentandDiagnostics(event)
     elif httpMethod == 'DELETE':
-        return deleteHealthCareProvider(event)
+        return deleteTreatmentandDiagnostics(event)
     else :
         return {
             'statusCode': 400,
             'body': 'Invalid HTTP Method'
         }
-def createHealthCareProvider(event):
+def createTreatmentandDiagnostics(event):
     try:
         # Get the request body
         body = json.loads(event['body'])
-        provider_info = body['providerInfo'] 
+
         # Create a new item in the table
-        response = table.put_item(Item=provider_info)
+        response = table.put_item(Item=body)
         response_body={
-            'message':'Health Care provider Successfully Created',
+            'message':'Treatment and Diagnostics Successfully Created',
             'response':response
         }
         # Return a success message
@@ -45,18 +46,17 @@ def createHealthCareProvider(event):
             'statusCode': 500,
             'body': json.dumps('Error: {}'.format(str(e)))
         }
-def getHealthCareProvider(event):
+def getTreatmentandDiagnostics(event):
     try:
         # Get the ID from the path parameters
-        providerID = event['providerID']
+        TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
 
         # Get the item from the table
         response = table.query(
-            KeyConditionExpression=boto3.dynamodb.conditions.Key('providerID').eq(providerID)
+        KeyConditionExpression = boto3.dynamodb.conditions.Key('TreatmentandDiagnosticsID').eq(TreatmentandDiagnosticsID) 
         )
-
         # check if items were found
-        items = response.get('Items', [])
+        items = response.get['Items',[]]
         if items:
             return {
                 'statusCode': 200,
@@ -65,25 +65,27 @@ def getHealthCareProvider(event):
         else:
             return {
                 'statusCode': 404,
-                'body': json.dumps('No health care provider found')
+                'body': json.dumps('No Treatment and Diagnostics found')
             }
+
     except Exception as e:
         # Return an error message
         return {
             'statusCode': 500,
             'body': json.dumps('Error: {}'.format(str(e)))
         }
-def updateHealthCareProvider(event):
+def updateTreatmentandDiagnostics(event):
     try:
         # Get the ID from the path parameters
-        providerID = event['providerID']
+        TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
+
         # Get the request body
-        update_data = event['UpdateData']
+        update_data = event['Update_data']
 
         # Update the item in the table
         response = table.query(
-            KeyConditionExpression=boto3.dynamodb.conditions.Key('providerID')
-            .eq(providerID),
+            KeyConditionExpession = boto3.dynamodb.conditions.Key('TreatmentandDiagnosticsID').
+            eq(TreatmentandDiagnosticsID),
             ScanIndexForward=False,
             Limit=1
         )
@@ -91,9 +93,9 @@ def updateHealthCareProvider(event):
         if not items:
             return {
                 'statusCode': 404,
-                'body': json.dumps('No health care provider found')
+                'body': json.dumps('No Treatment and Diagnostics found')
             }
-        date_created= items[0]['DateCreated']
+        date_created= items[0]['date_created']
 
         update_expression = 'set '+ ', '.join([f"{key} = :{key}"
                                             for key in update_data.keys()])
@@ -101,13 +103,13 @@ def updateHealthCareProvider(event):
         expression_attribute_values = {f":{key}": value
                                     for key, value in update_data.items()}
         update_response = table.update_item(
-            Key={
-                'providerID': providerID,
-                'DateCreated': date_created
+            key={
+                'TreatmentandDiagnosticsID':TreatmentandDiagnosticsID,
+                'DateCreated':date_created
             },
-            UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_attribute_values,
-            ReturnValues="UPDATED_NEW"
+            UpdateExpression = update_expression,
+            ExpressionAttributeValues = expression_attribute_values,
+            ReturnValues = "UPDATED_NEW"
         )
         return {
             'statusCode': 200,
@@ -120,37 +122,35 @@ def updateHealthCareProvider(event):
             'body': json.dumps('Error: {}'.format(str(e)))
         }
 
-def deleteHealthCareProvider(event):
+def deleteTreatmentandDiagnostics(event):
     try:
         # Get the ID from the path parameters
-        providerID = event['providerID']
+        TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
 
         # Get the item from the table
         response = table.query(
-        KeyConditionExpression = boto3.dynamodb.conditions.Key('providerID')
-        .eq(providerID),
+        KeyConditionExpression = boto3.dynamodb.conditions.Key('TreatmentandDiagnosticsID')
+        .eq(TreatmentandDiagnosticsID),
         ScanIndexForward=False, # sorts in decending order based on the sort key 
         Limit=1
         )
         # check if items were found
-        items = response.get('Items', [])
+        items = response.get['Items', []]
         if items:
-            date_created = items[0]['DateCreated']
             # Delete the item from the table
             response = table.delete_item(
                 Key={
-                    'providerID': providerID,
-                    'DateCreated': date_created
+                    'TreatmentandDiagnosticsID': TreatmentandDiagnosticsID
                 }
             )
             return {
                 'statusCode': 200,
-                'body': json.dumps('Health Care Provider Successfully Deleted')
+                'body': json.dumps('Treatment and Diagnostics Successfully Deleted')
             }
         else:
             return {
                 'statusCode': 404,
-                'body': json.dumps('No health care provider found')
+                'body': json.dumps('No Treatment and Diagnostics found')
             }
 
     except Exception as e:

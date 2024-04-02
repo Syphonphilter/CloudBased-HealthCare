@@ -33,6 +33,7 @@ class TestLambdaFunctions(unittest.TestCase):
                 {'AttributeName':'DateCreated','AttributeType':'S'}],
             ProvisionedThroughput={'ReadCapacityUnits': 1, 'WriteCapacityUnits': 1}
         )
+
     def test_1_create_provider_item(self):
             """
             Test create_item function
@@ -68,13 +69,13 @@ class TestLambdaFunctions(unittest.TestCase):
             'providerID': 'DISHA1234',
             'UpdateData': {
                 'ProviderInformation':{
-                    'Name': 'UpdateTest',
+                    'Name': 'Update',
                 }
             }
         }
         context = None
         response = lambda_handler(event,context)
-        self.assertEqual(response['statusCode'], 200)
+        self.assertEqual(response['statusCode'], second=200)
         # Add more assertions based on expected outcome
     def test_4_delete_provider_item(self):
         """

@@ -1,25 +1,33 @@
-{
-  
+{   "providerInfo":{
     "providerID": "DISHA1234",
     "DateCreated": "2023-01-01",
     "Speciality": "Dermatologist",
-    "Affilications": [{
-        "FundingCompany": "UNB",
-        "DateOfFunding": "1985-07-28"
-    }],
-    "Schedule":[{
-        "Date": "2024-01-01",
-        "StartTime": "10:00",
-        "EndTime": "12:00",
-        "PatientID":"P1234",
-        "Case":"Acne"
-    },{
-        "Date": "2024-01-01",
-        "StartTime": "10:00",
-        "EndTime": "12:00",
-        "PatientID":"P12322",
-        "Case":"Eczyma"
-    }
-]
-
-}
+    "ProviderInformation" :{
+        "Name": "Dr. Disha",
+        "Address": "123 Main St",
+        "Phone": "555-1234",
+        "Email": "disha@example.com"
+    },
+    "Affiliations": [
+        {
+            "FundingCompany": "UNB",
+            "DateOfFunding": "1985-07-28"
+        }
+    ],
+    "Schedule": [
+        {
+            "Date": "2024-01-01",
+            "StartTime": "10:00",
+            "EndTime": "12:00",
+            "PatientID": "P1234",
+            "Case": "Acne"
+        },
+        {
+            "Date": "2024-01-01",
+            "StartTime": "10:00",
+            "EndTime": "12:00",
+            "PatientID": "P12322",
+            "Case": "Eczema"
+        }
+    ]
+}}
