@@ -1,12 +1,13 @@
-
+#Lambda CRUD for Patients in Medi Nexus Application
+import base64
 import json
 import boto3
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('PatientInformation')
-
-def lambda_handler(event):
+s3 = boto3.client('s3')
+def lambda_handler(event,context):
     http_method = event['httpMethod']
 
     if http_method == 'POST':
@@ -30,7 +31,21 @@ def lambda_handler(event):
 def create_item(event):
     try:
         # Parse the incoming event body assuming it contains patient information in JSON format
-        patient_info = json.loads(event['body']) 
+        body = json.loads(event['body'])
+        patient_info = body['patientInfo']  # Regular patient information
+        # Assuming 'photoBase64' and 'documentBase64' contain the base64-encoded file contents
+        photo_content = base64.b64decode(patient_info['PatientPhoto'])
+        document_content = base64.b64decode(patient_info['PatientDocuments'])
+
+        patient_image_bucket = 'patient-photo-bucket'
+        patient_documents_bucket = 'patient-documents-bucket'
+
+        photo_key = f"patients/{patient_info['PatientID']}/photo.png"
+        document_key = f"patients/{patient_info['PatientID']}/document.pdf"
+
+        # Upload to S3
+        upload_file_to_s3(patient_image_bucket, photo_content, photo_key,'image/png')
+        upload_file_to_s3(patient_documents_bucket, document_content, document_key,'application/pdf')
         # Insert the patient information into the DynamoDB table
         response = table.put_item(Item=patient_info)
         #remaining_time = context.get_remaining_time_in_millis()
@@ -67,7 +82,6 @@ def read_items(event):
             # Assuming you want to return all records for a patient
             return {
                 'statusCode': 200,
-                'exectuo'
                 'body': json.dumps(items)
             }
         else:
@@ -90,7 +104,8 @@ def update_item(event):
 
         # Step 1: Query to find the latest record for the given PatientID
         response = table.query(
-            KeyConditionExpression = boto3.dynamodb.conditions.Key('PatientID').eq(patient_id),
+            KeyConditionExpression = boto3.dynamodb.conditions.Key('PatientID').
+            eq(patient_id),
             ScanIndexForward=False, # This ensures the results are returned in descending order by DateCreated
             Limit=1
         )
@@ -108,13 +123,15 @@ def update_item(event):
         # Step 2: Update the record using PatientID and the retrieved DateCreated
         # Construct the update expression and expression attribute values based on the update data dictionary
         # Example: set key1 = :key1, key2 = :key2, ...
-        update_expression = 'set ' + ', '.join([f"{key} = :{key}" for key in update_data.keys()])
+        update_expression = 'set ' + ', '.join([f"{key} = :{key}" 
+                                                for key in update_data.keys()])
 
         # would be set , key= :key, value= :value 
         # Construct the expression attribute values dictionary based on the update data dictionary
         # Example: {f":{key}": value for key, value in update_data.items()}
         # would be {f":key": value, f":value": value}
-        expression_attribute_values = {f":{key}": value for key, value in update_data.items()}
+        expression_attribute_values = {f":{key}": value 
+                                       for key, value in update_data.items()}
 
         update_response = table.update_item(
             Key={
@@ -178,3 +195,25 @@ def delete_item(event):
             'statusCode': 500,
             'body': json.dumps(f'Error: {str(e)}')
         }
+
+#functions
+def image_to_base64(image_path: str) -> str:
+    with open(image_path, 'rb') as image_file:
+        # Read the file
+        encoded_string = base64.b64encode(image_file.read())
+        # Convert the bytes to a string
+        return encoded_string.decode('utf-8')
+
+def base64_to_pdf(base64_string: str)->bytes:
+    # Decode the Base64 string, converting it back to bytes
+    pdf_bytes = base64.b64decode(base64_string)
+def base64_to_image(base64_string: str)->bytes:
+    # Decode the Base64 string, converting it back to bytes
+    image_bytes = base64.b64decode(base64_string)
+
+def upload_file_to_s3(bucket, content, key, contentType):
+    try:
+        response = s3.put_object(Bucket=bucket, Key=key, Body=content,ContentType=contentType)
+        # Handle response if necessary
+    except Exception as e:
+        print(f"Error uploading to S3: {e}")
