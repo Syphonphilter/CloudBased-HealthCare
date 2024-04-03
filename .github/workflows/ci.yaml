@@ -15,6 +15,9 @@ jobs:
       matrix:
         python-version: [3.11]  # Add other Python versions here if needed
 
+    env:
+      AWS_DEFAULT_REGION: us-east-1 # Set the AWS region for boto3
+
     steps:
     - uses: actions/checkout@v2
     
@@ -26,7 +29,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r medi-nexus-backend/requirements.txt 
+        pip install -r medi-nexus-backend/requirements.txt
         
     - name: Run Tests cases with Test Coverage
       working-directory: medi-nexus-backend  # Specify the directory where to run tests
