@@ -6,7 +6,7 @@ import boto3
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('TreatmentandDiagnostics')
-
+#
 def lambda_handler(event, context):
     # Get the ID from the path parameters
     httpMethod = event['httpMethod']
@@ -28,9 +28,9 @@ def createTreatmentandDiagnostics(event):
     try:
         # Get the request body
         body = json.loads(event['body'])
-
+        treatmentandDiagnosticsInfo = body['treatmentandDiagnosticsInfo']
         # Create a new item in the table
-        response = table.put_item(Item=body)
+        response = table.put_item(Item=treatmentandDiagnosticsInfo)
         response_body={
             'message':'Treatment and Diagnostics Successfully Created',
             'response':response
@@ -56,7 +56,7 @@ def getTreatmentandDiagnostics(event):
         KeyConditionExpression = boto3.dynamodb.conditions.Key('TreatmentandDiagnosticsID').eq(TreatmentandDiagnosticsID) 
         )
         # check if items were found
-        items = response.get['Items',[]]
+        items = response.get('Items',[])
         if items:
             return {
                 'statusCode': 200,
@@ -80,11 +80,11 @@ def updateTreatmentandDiagnostics(event):
         TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
 
         # Get the request body
-        update_data = event['Update_data']
+        update_data = event['UpdateData']
 
         # Update the item in the table
         response = table.query(
-            KeyConditionExpession = boto3.dynamodb.conditions.Key('TreatmentandDiagnosticsID').
+            KeyConditionExpression = boto3.dynamodb.conditions.Key('TreatmentandDiagnosticsID').
             eq(TreatmentandDiagnosticsID),
             ScanIndexForward=False,
             Limit=1
@@ -95,7 +95,7 @@ def updateTreatmentandDiagnostics(event):
                 'statusCode': 404,
                 'body': json.dumps('No Treatment and Diagnostics found')
             }
-        date_created= items[0]['date_created']
+        date_created= items[0]['DateCreated']
 
         update_expression = 'set '+ ', '.join([f"{key} = :{key}"
                                             for key in update_data.keys()])
@@ -103,7 +103,7 @@ def updateTreatmentandDiagnostics(event):
         expression_attribute_values = {f":{key}": value
                                     for key, value in update_data.items()}
         update_response = table.update_item(
-            key={
+            Key={
                 'TreatmentandDiagnosticsID':TreatmentandDiagnosticsID,
                 'DateCreated':date_created
             },
@@ -135,12 +135,15 @@ def deleteTreatmentandDiagnostics(event):
         Limit=1
         )
         # check if items were found
-        items = response.get['Items', []]
+        items = response.get('Items', [])
         if items:
+            date_created = items[0]['DateCreated']
             # Delete the item from the table
             response = table.delete_item(
                 Key={
-                    'TreatmentandDiagnosticsID': TreatmentandDiagnosticsID
+                    
+                    'TreatmentandDiagnosticsID': TreatmentandDiagnosticsID,
+                    'DateCreated': date_created
                 }
             )
             return {

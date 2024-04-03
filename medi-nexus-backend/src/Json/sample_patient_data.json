@@ -36,7 +36,20 @@
         "2021": {
             "Medication": ["Cetirizine"],
             "FollowUp": "2021-04-15"
-        }
+        },
+        "Cases":[{
+            "CaseID": "1232",
+            "Description": "Allergy symptoms",
+            "Date": "2021-03-15",
+            "TreatmentPlan": "2021"
+        },
+    {
+        "CaseID": "1234",
+        "Description": "Allergy symptoms",
+        "Date": "2021-03-15",
+        "TreatmentPlan": "2021"
+    }]
+
     }
 }
 }

@@ -1,0 +1,10 @@
+aws lambda create-function \
+    --function-name patient_lambda \
+    --runtime python3.12 \
+    --role arn:aws:iam::339712976639:role/LambdaRoles \
+    --handler patient_lambda.lambda_handler \
+    --zip-file fileb://patient_lambda.zip \
+    --region us-east-1
+
+
+zip -r9 patient_lambda.zip patient_lambda.py

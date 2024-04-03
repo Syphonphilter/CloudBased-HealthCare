@@ -1,0 +1,30 @@
+{
+	"treatmentandDiagnosticsInfo": {
+		"TreatmentandDiagnosticsID": "TD1234",
+		"HealthCaseID": "12345",
+		"DateCreated": "2023-01-01",
+		"PatientID": "12345",
+		"TreatmentInfo": [
+			{
+				"treatmentID": "T1234",
+				"treatmentName": "Treatment1",
+				"treatmentDescription": "Treatment1 Description",
+				"treatmentPrice": "100",
+				"providerID": "HCP1234",
+				"TreatmentStatus": "Active",
+				"CaseID": "C1234"
+			}
+		],
+		"DiagnosticInfo": [
+			{
+				"diagnosticID": "D1234",
+				"diagnosticName": "Diagnostic1",
+				"diagnosticDescription": "Diagnostic1 Description",
+				"diagnosticPrice": "100",
+				"providerID": "HCP1234",
+				"CaseID": "C1234",
+				"DiagnosticStatus": "Active"
+			}
+		]
+	}
+}

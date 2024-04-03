@@ -68,7 +68,7 @@ def create_item(event):
 def read_items(event):
     try:
         # Extract PatientID from the event object; no need for DateCreated for this query
-        patient_id = event['PatientID']
+        patient_id = event['queryStringParameters']['PatientID']
 
         # Perform a query to fetch all items for the given PatientID
         response = table.query(
