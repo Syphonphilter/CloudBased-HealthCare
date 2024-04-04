@@ -1,0 +1,7 @@
+.app_button{
+    color:#fff !important;
+    background-color: var(--primary-color) !important;
+    font-family:'Montserrat'!important ;
+    font-weight: bold !important;
+    font-size: 1em !important;
+}

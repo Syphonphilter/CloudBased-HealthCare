@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../Assets/fonts/Montserrat-SemiBold.woff') format('woff');
+  font-weight: bold; /* Adjust font-weight as necessary */
+  font-style: normal;
+}
+
+
+.marquee {
+  height: 4vh;
+
+  width: 95%;
+  overflow: hidden;
+  position: relative;
+}
+.marquee::before,
+.marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10%; /* Control the width of the fading effect */
+  z-index: 2;
+}
+
+.marquee::before {
+  left: 0;
+  background: linear-gradient(to right, #000 0%, transparent 100%);
+}
+
+.marquee::after {
+  right: 0;
+  background: linear-gradient(to left, #000 0%, transparent 100%);
+}
+.scrollable-div {
+  overflow-y: auto; /* Enables vertical scrolling */
+  height: 50vh; /* Or any other height */
+  
+}
+.marquee div {
+  display: block;
+  width: 200%;
+
+  position: absolute;
+  overflow: hidden;
+
+  animation: marquee 20s linear infinite;
+}
+
+.marquee span {
+  float: left;
+  width: 50%;
+  justify-content: center;
+}
+
+@keyframes marquee {
+  0% { left: 0; }
+  100% { left: -100%; }
+}
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --primary-color: #037668;
+  --primary-color-light: #03766850;
+  --primary-color-light2:#037669190;
+  --secondary-color:#29536F;
+  --secondary-color-light:#00348350;
+  --accent-color: #037668;
+  --font-family: 'Montserrat';
+}
+ input#file-upload-button{
+    color:#fff !important;
+    background-color: var(--primary-color) !important;
+    font-family:'Montserrat'!important ;
+    font-weight: bold !important;
+    font-size: 1em !important;
+ }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+body {
+  font-family: var(--font-family), sans-serif !important;
+
+  font-weight: bold !important;
+  /* Other global styles */
+}
+input{
+  font-family: var(--font-family), sans-serif !important;
+
+}
+.app-auth-template{
+
+  background-image: linear-gradient(-225deg, #037669e7 10%, #29536f 50%);
+  }

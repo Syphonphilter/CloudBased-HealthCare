@@ -1,0 +1,36 @@
+/* global.css */
+
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../Assets/fonts/Montserrat-SemiBold.woff') format('woff');
+  font-weight: bold; /* Adjust font-weight as necessary */
+  font-style: normal;
+}
+
+:root {
+  --primary-color: #037668;
+  --primary-color-light: #03766850;
+  --primary-color-light2:#037669190;
+  --secondary-color:#29536F;
+  --secondary-color-light:#00348350;
+  --accent-color: #037668;
+  --font-family: 'Montserrat';
+
+  /* Other global variables */
+}
+
+body {
+  font-family: var(--font-family), sans-serif !important;
+
+  font-weight: bold !important;
+  /* Other global styles */
+}
+input{
+  font-family: var(--font-family), sans-serif !important;
+
+}
+.app-auth-template{
+
+  background-image: linear-gradient(-225deg, #037669e7 10%, #29536f 50%);
+  }
