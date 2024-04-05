@@ -49,7 +49,7 @@ def createTreatmentandDiagnostics(event):
 def getTreatmentandDiagnostics(event):
     try:
         # Get the ID from the path parameters
-        TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
+        TreatmentandDiagnosticsID = event['queryStringParameters']['TreatmentandDiagnosticsID']
 
         # Get the item from the table
         response = table.query(
@@ -77,10 +77,16 @@ def getTreatmentandDiagnostics(event):
 def updateTreatmentandDiagnostics(event):
     try:
         # Get the ID from the path parameters
-        TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
+        TreatmentandDiagnosticsID = event['queryStringParameters']['TreatmentandDiagnosticsID']
 
         # Get the request body
-        update_data = event['UpdateData']
+        request_body = event['body']
+        if request_body:
+            body_data = json.loads(request_body)
+            # Now body_data is a Python dictionary
+            update_data = body_data.get('UpdateData', {})  # Safely get UpdateData or default to {}
+        else:
+            update_data = {}
 
         # Update the item in the table
         response = table.query(
@@ -125,7 +131,7 @@ def updateTreatmentandDiagnostics(event):
 def deleteTreatmentandDiagnostics(event):
     try:
         # Get the ID from the path parameters
-        TreatmentandDiagnosticsID = event['TreatmentandDiagnosticsID']
+        TreatmentandDiagnosticsID = event['queryStringParameters']['TreatmentandDiagnosticsID']
 
         # Get the item from the table
         response = table.query(
@@ -141,7 +147,6 @@ def deleteTreatmentandDiagnostics(event):
             # Delete the item from the table
             response = table.delete_item(
                 Key={
-                    
                     'TreatmentandDiagnosticsID': TreatmentandDiagnosticsID,
                     'DateCreated': date_created
                 }

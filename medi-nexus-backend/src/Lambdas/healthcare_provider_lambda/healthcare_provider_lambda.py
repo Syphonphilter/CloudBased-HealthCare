@@ -48,7 +48,7 @@ def createHealthCareProvider(event):
 def getHealthCareProvider(event):
     try:
         # Get the ID from the path parameters
-        providerID = event['providerID']
+        providerID = event['queryStringParameters']['providerID']
 
         # Get the item from the table
         response = table.query(
@@ -76,9 +76,15 @@ def getHealthCareProvider(event):
 def updateHealthCareProvider(event):
     try:
         # Get the ID from the path parameters
-        providerID = event['providerID']
+        providerID = event['queryStringParameters']['providerID']
         # Get the request body
-        update_data = event['UpdateData']
+        request_body = event['body']
+        if request_body:
+            body_data = json.loads(request_body)
+            # Now body_data is a Python dictionary
+            update_data = body_data.get('UpdateData', {})
+        else:
+            update_data={}# Safely get UpdateData or default to {}
 
         # Update the item in the table
         response = table.query(
@@ -123,7 +129,7 @@ def updateHealthCareProvider(event):
 def deleteHealthCareProvider(event):
     try:
         # Get the ID from the path parameters
-        providerID = event['providerID']
+        providerID = event['queryStringParameters']['providerID']
 
         # Get the item from the table
         response = table.query(

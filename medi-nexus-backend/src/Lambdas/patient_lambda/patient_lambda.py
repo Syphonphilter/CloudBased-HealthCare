@@ -98,9 +98,16 @@ def read_items(event):
         }
 def update_item(event):
     try:
-        patient_id = event['PatientID']
+        patient_id = event['queryStringParameters']['PatientID']
         # Additional data to update the record with
-        update_data = event['UpdateData']
+        request_body = event['body']
+        if request_body:
+            body_data = json.loads(request_body)
+            # Now body_data is a Python dictionary
+            update_data = body_data.get('UpdateData', {})  # Safely get UpdateData or default to {}
+        else:
+            update_data = {}
+
 
         # Step 1: Query to find the latest record for the given PatientID
         response = table.query(
@@ -157,7 +164,7 @@ def update_item(event):
 
 def delete_item(event):
     try:
-        patient_id = event['PatientID']
+        patient_id = event['queryStringParameters']['PatientID']
 
         # Step 1: Query to find the latest record for the given PatientID
         response = table.query(

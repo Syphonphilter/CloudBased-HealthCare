@@ -5,7 +5,9 @@ from Lambdas.treatment_and_diagnostics_lambda.treatment_and_diagnostics_lambda i
 from moto import mock_aws
 import boto3
 import unittest
+import threading
 import json
+from queue import Queue
 
 @mock_aws
 class TestLambdaFunctions(unittest.TestCase):
@@ -36,7 +38,7 @@ class TestLambdaFunctions(unittest.TestCase):
 
     def test_1_create_treatmentandDiagnostics_item(self):
             """
-            Test create_item function
+            Test Create Treatment and Diagnostics Lambda Function
             """
             event = {
             'httpMethod': 'POST',
@@ -48,12 +50,12 @@ class TestLambdaFunctions(unittest.TestCase):
             # Add more assertions as necessary
     def test_2_read_treatmentandDiagnostics_items(self):
         """
-        Test read_items function
+        Test Read Treatment and Diagnostics Lambda Function
         """
         # You might need to insert an item into the table first to test read functionality
         event = {
             'httpMethod':'GET',
-            'TreatmentandDiagnosticsID': 'TD1234',
+            'queryStringParameters': {'TreatmentandDiagnosticsID': 'TD1234'}
         }
         context = None
         response = lambda_handler(event,context)
@@ -61,17 +63,19 @@ class TestLambdaFunctions(unittest.TestCase):
         # Add more assertions as necessary
     def test_3_update_treatmentandDiagnostics_item(self):
         """
-        Test update_item function
+        Test Update Treatment and Diagnostics Lambda Function
         """
         # Ensure there's an item to update
         event = {
             'httpMethod':'PUT',
-            'TreatmentandDiagnosticsID': 'TD1234',
+            'queryStringParameters': {'TreatmentandDiagnosticsID': 'TD1234'},
+            'body':json.dumps({
             'UpdateData': {
                 'TreatmentInfo':{
                     'TreatmentName': 'Update',
                 }
             }
+            })
         }
         context = None
         response = lambda_handler(event,context)
@@ -79,16 +83,49 @@ class TestLambdaFunctions(unittest.TestCase):
         # Add more assertions based on expected outcome
     def test_4_delete_treatmentandDiagnostics_item(self):
         """
-        Test delete_item function
+        Test Delete Treatment and Diagnostics Lambda Function
+
         """
         # Ensure there's an item to delete
         event = {
             'httpMethod':'DELETE',
-            'TreatmentandDiagnosticsID': 'TD1234',
+            'queryStringParameters': {'TreatmentandDiagnosticsID': 'TD1234'}
         }
         context = None
         response = lambda_handler(event,context)
         self.assertEqual(response['statusCode'], 200)
+
+    def test_5_concurrent_invocations(self):
+            def invoke_lambda(event, queue):
+                response = lambda_handler(event, None)
+                queue.put(response)
+
+            # Create a queue to collect responses
+            response_queue = Queue()
+
+            # Create an event for the Lambda function
+            event = {
+                'httpMethod': 'GET',
+                'queryStringParameters': {'TreatmentandDiagnosticsID': 'TD1234'}
+            }
+
+            # List to keep track of threads
+            threads = []
+
+            # Launch threads to simulate concurrent invocations
+            for _ in range(10):
+                thread = threading.Thread(target=invoke_lambda, args=(event, response_queue))
+                thread.start()
+                threads.append(thread)
+
+            # Wait for all threads to complete
+            for thread in threads:
+                thread.join()
+
+            # Check all responses
+            while not response_queue.empty():
+                response = response_queue.get()
+                self.assertEqual(response['statusCode'], 200)
 
 if __name__ == '__main__':
     unittest.main()
