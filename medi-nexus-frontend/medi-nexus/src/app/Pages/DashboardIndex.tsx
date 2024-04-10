@@ -11,9 +11,9 @@ import { AppButton } from '../DesignSystem/Atoms/AppButton/AppButton';
 
 const DashboardIndex = () => {
   const myObject: { [key: string]: any[] } = {
-    data1: ['P-1234', 'Abdulkadir Bala', 'CASE-200','Pending'],
-    data2: ['P-1235', 'Disha Rajesh', 'CASE-300','Done'],
-    data3: ['P-1236', 'Nirav', 'CASE-400','Failed'],
+    data1: ['P1000', 'Abdulkadir Bala', 'CASE-200','Pending'],
+    data2: ['P1235', 'Disha Rajesh', 'CASE-300','Done'],
+    data3: ['P1236', 'Nirav', 'CASE-400','Failed'],
   };
 
   const viewStatus = (status: string) => {
@@ -53,10 +53,10 @@ throw new Error('Function not implemented.');
           </div>
       <div className=''>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <ValueBasedAppCard icon={faClipboardList} header='Patient Schedule' value='110,910' percentile={+3} />
-          <ValueBasedAppCard color={Colors.pendingItem} accent={Colors.pendingItemLight} icon={faCalendarDay} header='Appointments Today' value='12,300' />
-          <ValueBasedAppCard color={Colors.secondary} accent={Colors.secondaryLight} icon={faHospitalUser} header='Registered Patients' value='12,300' />
-          <ValueBasedAppCard color={Colors.danger} accent={Colors.dangerLight} icon={faTimesSquare} header='Missed Appointments' value='12,300' />
+          <ValueBasedAppCard icon={faClipboardList} header='Patient Schedule' value='1' percentile={+3} />
+          <ValueBasedAppCard color={Colors.pendingItem} accent={Colors.pendingItemLight} icon={faCalendarDay} header='Appointments Today' value='1' />
+          <ValueBasedAppCard color={Colors.secondary} accent={Colors.secondaryLight} icon={faHospitalUser} header='Registered Patients' value='3' />
+          <ValueBasedAppCard color={Colors.danger} accent={Colors.dangerLight} icon={faTimesSquare} header='Missed Appointments' value='1' />
         </div>
 
         <ListTable tableLable={'Appointment Logs'} columnNames={['Patient ID','Patient Name','Case ID','Status','Action']} rowData={tableObject} />

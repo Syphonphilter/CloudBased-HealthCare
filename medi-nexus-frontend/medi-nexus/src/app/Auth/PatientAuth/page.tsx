@@ -31,18 +31,18 @@ const PatientAuth = () => {
             <Form formData={formData} setFormData={setFormData} buttonLabel='Register' buttonAction={handleLogin} />
 
             <div className="w-full justify-center space-y-4 text-center md:w-2/4">
-            <TypographyComponent  fontSize={15}>
+            {/* <TypographyComponent  fontSize={15}>
                 <p>
                  Or.
                 </p>
                 </TypographyComponent>
             
             <AppButton
-                className='app-button w-full h-12 '
+                className='app-button  '
                 label='Try a Demo Account'
                 onClick={() => {
                  
-                }}/>
+                }}/> */}
             <LoadingModal progressLabel='REGISTERING' isOpen={loadingState} />
             </div>
 

@@ -108,7 +108,7 @@ const Navigation: React.FC<{ onUpdate: (currentDashboard: string) => void }> = (
             <div className='flex justify-start'>
               <Button sx={{ color: Colors.absoluteWhite, fontFamily: Labels.font_family }}>
                 <AppIcon className='h-8 w-8' size='2x' icon={faBars} color={Colors.primary} />
-                <div className='flex items-center  pl-5 pr-5' >Patient Menu</div>
+                <div className='flex items-center  pl-5 pr-5' >Provider Menu</div>
               </Button>
             </div>
           </CAccordionHeader>

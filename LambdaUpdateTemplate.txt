@@ -1,1 +1,1 @@
-aws lambda update-function-code --function-name patient_lambda --zip-file fileb://patient_lambda.zip
+aws lambda update-function-code --function-name treatment_and_diagnostics_lambda --zip-file fileb://treatment_and_diagnostics_lambda.zip

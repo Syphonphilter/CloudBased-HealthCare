@@ -45,7 +45,7 @@ const Form: React.FC<file> = ({ formData, setFormData, buttonLabel, buttonAction
         
   return (
     <div className=" flex w-full justify-center items-center">
-      <div className="w-full md:w-2/4">
+      <div className="lg:w-1/3 w-[85%] md:w-2/3">
         <div className="app-form rounded-2xl bg-item-dark shadow-md  px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
             
@@ -74,7 +74,7 @@ const Form: React.FC<file> = ({ formData, setFormData, buttonLabel, buttonAction
       
             <div className="flex items-center justify-between">
               <AppButton
-                className='app-button  w-full h-12 '
+                className='app-button  lg:w-1/3 w-[85%] md:w-1/3 h-12'
                 label={buttonLabel}
                 onClick={() => {
                   buttonAction()
